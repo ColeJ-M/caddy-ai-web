@@ -422,20 +422,58 @@ const TAB_ICONS = {
   profile: <><circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M5 20c1.5-4 5-5 7-5s5.5 1 7 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></>,
 };
 function BottomTabBar({ active, onChange }) {
-  const tabs = [{ id: "home", label: "Home" }, { id: "new-round", label: "New Round" }, { id: "progress", label: "Progress" }, { id: "profile", label: "Profile" }];
-  return <div style={styles.tabBar}>{tabs.map((t) => (
-    <button key={t.id} onClick={() => onChange(t.id)} style={styles.tabBarBtn}>
-      <div style={{ ...styles.tabBarIconWrap, ...(active === t.id ? styles.tabBarIconWrapActive : {}) }}>
-        <svg width="20" height="20" viewBox="0 0 24 24" style={{ color: active === t.id ? "#fff" : "var(--muted)" }}>{TAB_ICONS[t.id]}</svg>
-      </div>
-      <span style={{ ...styles.tabBarLabel, color: active === t.id ? "var(--pine)" : "var(--muted)", fontWeight: active === t.id ? 700 : 500 }}>{t.label}</span>
-    </button>
-  ))}</div>;
+  const tabs = [
+    { id: "home", label: "Home" },
+    { id: "new-round", label: "New Round" },
+    { id: "progress", label: "Progress" },
+    { id: "profile", label: "Profile" }
+  ];
+  // Add safe area padding for mobile at the bottom
+  return (
+    <div
+      style={{
+        ...styles.tabBar,
+        paddingBottom: "calc(12px + env(safe-area-inset-bottom, 12px))"
+      }}
+    >
+      {tabs.map((t) => (
+        <button key={t.id} onClick={() => onChange(t.id)} style={styles.tabBarBtn}>
+          <div
+            style={{
+              ...styles.tabBarIconWrap,
+              ...(active === t.id ? styles.tabBarIconWrapActive : {})
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" style={{ color: active === t.id ? "#fff" : "var(--muted)" }}>
+              {TAB_ICONS[t.id]}
+            </svg>
+          </div>
+          <span
+            style={{
+              ...styles.tabBarLabel,
+              color: active === t.id ? "var(--pine)" : "var(--muted)",
+              fontWeight: active === t.id ? 700 : 500
+            }}
+          >
+            {t.label}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
 }
-function LoadingScreen({ text }) { return <div style={{ ...styles.screen, alignItems: "center", justifyContent: "center" }}><div style={styles.spinner} /><div style={styles.loadingText}>{text}</div></div>; }
+function LoadingScreen({ text }) {
+  return (
+    <div style={{ ...styles.screen, alignItems: "center", justifyContent: "center" }}>
+      <div style={styles.spinner} />
+      <div style={styles.loadingText}>{text}</div>
+    </div>
+  );
+}
 
 function GlobalStyle() {
-  return <style>{`
+  return (
+    <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
     :root {
       --bg: #F5F8F6; --surface: #FFFFFF; --pine: #123024; --pine-dark: #0A1D15; --navy: #0F2942; --navy-dark: #091A2C;
@@ -444,11 +482,24 @@ function GlobalStyle() {
     @keyframes spin { to { transform: rotate(360deg); } }
     * { box-sizing: border-box; } html, body { overflow-x: hidden; }
     button { font-family: inherit; cursor: pointer; } input, textarea { font-family: inherit; } a { text-decoration: none; color: inherit; }
-  `}</style>;
+  `}</style>
+  );
 }
 
 const styles = {
-  appShell: { fontFamily: "'Inter', sans-serif", background: "var(--bg)", minHeight: 700, maxWidth: 420, margin: "0 auto", color: "var(--ink)", borderRadius: 24, overflow: "hidden", border: "1px solid var(--line)", position: "relative", boxShadow: "0 20px 60px rgba(15,41,66,0.12)" },
+  appShell: {
+    fontFamily: "'Inter', sans-serif",
+    background: "var(--bg)",
+    minHeight: 700,
+    maxWidth: "480px",      // UPDATED maxWidth
+    margin: "0 auto",
+    color: "var(--ink)",
+    borderRadius: 24,
+    overflow: "hidden",     // Ensure overflow is hidden
+    border: "1px solid var(--line)",
+    position: "relative",
+    boxShadow: "0 20px 60px rgba(15,41,66,0.12)"
+  },
   appBody: { display: "flex", flexDirection: "column", minHeight: 700 },
   tabContent: { flex: 1, overflowY: "auto", paddingBottom: 96 },
   screen: { padding: "28px 22px 32px", minHeight: 700, display: "flex", flexDirection: "column" },
